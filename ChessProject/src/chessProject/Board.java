@@ -32,14 +32,30 @@ public class Board extends Runner{
 	}
 	
 	public boolean isValid(int x, int y) {
-		if(board[x][y].contains(null)) {
+		if(board[x][y] == null) {
 			return true;
 		}
 		return false;
 	}
 	
-	public void setPiece(Piece newPiece) {
-		board[newPiece.getX()][newPiece.getY()] = newPiece;
+	public void setValid(int x, int y) {
+		board[x][y] = null;
+	}
+	
+	public void setPieces(Piece... newPieceS) {
+		for(Piece newPiece : newPieceS) {
+			board[newPiece.getX()][newPiece.getY()] = newPiece;
+		}
+	}
+	
+	public void movePiece(int startX, int startY, int endX, int endY) {
+		if(isValid(endX, endY)) {
+			board[endX][endY] = board[startX][startY];
+			setValid(startX, startY);
+		} else {
+			System.out.println("Invalid Move");
+			System.exit(0);
+		}
 	}
 	
 	
