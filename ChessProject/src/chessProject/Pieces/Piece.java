@@ -109,7 +109,7 @@ public class Piece extends Board{
         return false;
 	}
 	
-	public String setChessIconColor(char icon, String color) {
+	private String setChessIconColor(char icon, String color) {
 		String swapedIcon = icon+"";
 		String unicode = charToUnicode(icon);
 		String changingCharacter = unicode.split("265")[1];

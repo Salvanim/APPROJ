@@ -6,8 +6,8 @@ public class Board extends Runner{
 	Piece[][] board = new Piece[8][8];
 	public String toString() {
 	    String outString = "[";
-	    for(int row = 0; row < board.length; row++) {
-	        for(int col = 0; col < board[row].length; col++) {
+	    for(int row = 0; row < board[0].length; row++) {
+	        for(int col = 0; col < board.length; col++) {
 	            Piece piece = board[row][col];
 	            if(piece == null) {
 	            	if(col % 2 == 0 && row %2 == 0) {
@@ -45,6 +45,14 @@ public class Board extends Runner{
 	public void setPieces(Piece... newPieceS) {
 		for(Piece newPiece : newPieceS) {
 			board[newPiece.getX()][newPiece.getY()] = newPiece;
+		}
+	}
+	
+	public void setPieces(Piece[]... newPieces) {
+		for(Piece[] pieces : newPieces) {
+			for(Piece newPiece : pieces) {
+				board[newPiece.getX()][newPiece.getY()] = newPiece;
+			}
 		}
 	}
 	
