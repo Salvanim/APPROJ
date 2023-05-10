@@ -17,7 +17,7 @@ public class Piece extends Board{
 		this.pieceColor = newPieceColor;
 		this.x = newX;
 		this.y = newY;
-		this.icon = getColor(icon, newPieceColor);
+		this.icon = setChessIconColor(icon.charAt(0), newPieceColor);
 	}
 	
 	public String toString() {
@@ -63,7 +63,7 @@ public class Piece extends Board{
 	}
 	
 	public void setIcon(String icon) {
-		this.icon = getColor(icon, getPieceColor());
+		this.icon = icon;
 	}
 	
 	public void setDisplayName(String displayName) {
@@ -97,12 +97,6 @@ public class Piece extends Board{
 		moveDiagonal(xMovement, moveUp);
 	}
 	
-	public static String getColor(String piece, String targetColor) {
-		char type = Character.toLowerCase(piece.charAt(0));
-		char oppositeColor = targetColor.equalsIgnoreCase("white") ? 'w' : 'b';
-		char oppositePiece = (char) (oppositeColor + type - 'p');
-		return oppositePiece+"";
-	}
 	
 	public boolean contains(Object checking) {
 		Field[] fields = getClass().getDeclaredFields();
@@ -114,4 +108,66 @@ public class Piece extends Board{
         }
         return false;
 	}
+	
+	public String setChessIconColor(char icon, String color) {
+		String swapedIcon = icon+"";
+		String unicode = charToUnicode(icon);
+		String changingCharacter = unicode.split("265")[1];
+		if((isNumber(changingCharacter) && color == "white") || isLetter(changingCharacter) && color == "black") {
+			swapedIcon = unicodeEscapeToText("\\u265" + letterOrNumberToOppositeWithShift(changingCharacter.charAt(0),3));
+		}
+		return swapedIcon;
+	}
+	
+	public String letterOrNumberToOppositeWithShift(char input, int shift) {
+	    String result = "";
+	    String c = input+"";
+	    if(isLetter(c)) {
+	    	result += c.compareTo("")+shift;
+	    } else if (isNumber(c)) {
+	        result += numberToLetter(Integer.parseInt(c)-shift);
+	    }
+	    return result;
+	}
+	
+	private static char numberToLetter(int number) {
+	    int modNumber = (number - 1) % 26; // Convert to 0-indexed and take mod 26
+	    char letter = (char) ('A' + modNumber);
+	    return letter;
+	}
+	
+	private boolean isNumber(String input) {
+	    try {
+	        Double.parseDouble(input);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
+	
+	public boolean isLetter(String c) {
+		char letter = c.charAt(0);
+	    return (letter >= 'a' && letter <= 'z') || (letter >= 'A' && letter <= 'Z');
+	}
+	
+	private String charToUnicode(char c) {
+		return "\\u" + Integer.toHexString(c | 0x10000).substring(1);
+	}
+	
+	public static String unicodeEscapeToText(String input) {
+	    String result = "";
+	    int i = 0;
+	    while (i < input.length()) {
+	        if (input.charAt(i) == '\\' && i + 5 < input.length() && input.charAt(i+1) == 'u') {
+	            int codePoint = Integer.parseInt(input.substring(i+2, i+6), 16);
+	            result += (char) codePoint;
+	            i += 6;
+	        } else {
+	            result += input.charAt(i);
+	            i++;
+	        }
+	    }
+	    return result;
+	}
+
 }

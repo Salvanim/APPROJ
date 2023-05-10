@@ -1,19 +1,24 @@
 package chessProject;
 
-import java.util.ArrayList;
-
 import chessProject.Pieces.Piece;
 
 public class Board extends Runner{
 	Piece[][] board = new Piece[8][8];
-	
 	public String toString() {
 	    String outString = "[";
 	    for(int row = 0; row < board.length; row++) {
 	        for(int col = 0; col < board[row].length; col++) {
 	            Piece piece = board[row][col];
 	            if(piece == null) {
-	            	outString += "■";
+	            	if(col % 2 == 0 && row %2 == 0) {
+	            		outString += "□";
+	            	} else if (col % 2 == 0 && row %2 == 1){
+	            		outString += "■";
+	            	} else if (col % 2 == 1 && row %2 == 0){
+	            		outString += "■";
+	            	} else if (col % 2 == 1 && row %2 == 1){
+	            		outString += "□";
+	            	}
 	            } else {
 	                outString += piece.getIcon();
 	            }
@@ -36,5 +41,6 @@ public class Board extends Runner{
 	public void setPiece(Piece newPiece) {
 		board[newPiece.getX()][newPiece.getY()] = newPiece;
 	}
+	
 	
 }
