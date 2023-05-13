@@ -1,15 +1,16 @@
 package chessProject.Pieces;
 
-import chessProject.Board;
 import java.lang.reflect.Field;
 
-public class Piece extends Board{
-	private String displayName = null;
-	private String startColor = null;
-	private String pieceColor = null;
+public class Piece{
+	private String displayName = "pawn";
+	private String startColor = "white";
+	private String pieceColor = "white";
 	private int x = 0;
 	private int y = 0;
 	private String icon;
+	
+	public Piece() {}
 	
 	public Piece(String newDisplayName, String newStartColor, String newPieceColor, int newX, int newY, String icon) {
 		this.displayName = newDisplayName;
@@ -21,13 +22,7 @@ public class Piece extends Board{
 	}
 	
 	public String toString() {
-		int color = -1;
-		if(pieceColor.equals("white")) {
-			color  = 0;
-		} else if(pieceColor.equals("black")) {
-			color  = 1;
-		}
-		return color+displayName.substring(0, 2);
+		return icon + ":(" + x + "," + y + ")";
 	}
 	
 	public int getX() {
