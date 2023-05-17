@@ -4,25 +4,36 @@ import java.lang.reflect.Field;
 
 public class Piece{
 	private String displayName = "pawn";
-	private String startColor = "white";
+	private int value = 0;
 	private String pieceColor = "white";
 	private int x = 0;
 	private int y = 0;
 	private String icon;
-	
+	private int currentDirection = 1;
 	public Piece() {}
 	
-	public Piece(String newDisplayName, String newStartColor, String newPieceColor, int newX, int newY, String icon) {
+	public Piece(String newDisplayName, int value, String newPieceColor, int newX, int newY, String icon) {
 		this.displayName = newDisplayName;
-		this.startColor = newStartColor;
 		this.pieceColor = newPieceColor;
 		this.x = newX;
 		this.y = newY;
+		this.value = value;
+		this.icon = setChessIconColor(icon.charAt(0), newPieceColor);
+	}
+	
+	
+	public Piece(String newDisplayName, int value, String newPieceColor, int newX, int newY, String icon, int Direction) {
+		this.displayName = newDisplayName;
+		this.pieceColor = newPieceColor;
+		this.x = newX;
+		this.y = newY;
+		this.value = value;
+		this.currentDirection = Direction;
 		this.icon = setChessIconColor(icon.charAt(0), newPieceColor);
 	}
 	
 	public String toString() {
-		return icon + ":(" + x + "," + y + ")";
+		return icon + ":(" + x + "," + y + "):" + value;
 	}
 	
 	public int getX() {
@@ -41,8 +52,8 @@ public class Piece{
 		return displayName;
 	}
 	
-	public String getstartColor() {
-		return startColor;
+	public int getValue() {
+		return value;
 	}
 	
 	public String getPieceColor() {
@@ -65,8 +76,8 @@ public class Piece{
 		this.displayName = displayName;
 	}
 	
-	public void setstartColor(String startColor) {
-		this.startColor = startColor;
+	public void setstartColor(int value) {
+		this.value = value;
 	}
 	
 	public void setPieceColor(String pieceColor) {
@@ -164,5 +175,14 @@ public class Piece{
 	    }
 	    return result;
 	}
-
+	
+	
+	public int getCurrentDireciton() {
+		return currentDirection;
+	}
+	
+	public void swapCurrentDireciton() {
+		currentDirection *= -1;
+	}
+	
 }
