@@ -15,7 +15,7 @@ public class Board {
 	private Piece[][] board = new Piece[8][8];
 	private ArrayList<Piece> blackCaptured = new ArrayList<Piece>();
 	private ArrayList<Piece> whiteCaptured = new ArrayList<Piece>();
-	
+	private boolean kingBeingAttacked = false;
 	public String toString() {
 	    String outString = " ";
 	    for(int row = 0; row < board.length; row++) {
@@ -41,6 +41,10 @@ public class Board {
 	        outString += " \n ";
 	    }
 	    return outString.substring(0, outString.length() - 3) + " ";
+	}
+	
+	private void setPiecesByArray(Piece[][] board) {
+		this.board = board;
 	}
 	
 	private void createBoardWithPieces() {
@@ -118,6 +122,14 @@ public class Board {
 			}
 		}
 		return isCapture;
+	}
+	
+	private String inverseColor(String color) {
+		String returnColor = "black";
+		if(color == "black") {
+			returnColor = "white";
+		}
+		return returnColor;
 	}
 	
 	private boolean isMoveValid(int startX, int startY, int endX, int endY) {
@@ -309,8 +321,47 @@ public class Board {
 	}
 	
 	private void changePawnDireciton(int startX, int startY, int endX, int endY) {
-		if(endX == 7) {
+		if(endX == 7 || endX == 0) {
 			board[startX][startY].swapCurrentDireciton();
+		}
+	}
+	
+	private int getKingX(String color) {
+		int kingX = 0;
+		for(Piece[] x : board) {
+			for(Piece y : x) {
+				if(y != null) {
+					if(y.getPieceColor() == color && y.getDisplayName() == "king") {
+						kingX = y.getX();
+					}
+				}
+			}
+		}
+		return kingX;
+	}
+	
+	private int getKingY(String color) {
+		int kingY = 0;
+		for(Piece[] x : board) {
+			for(Piece y : x) {
+				if(y != null) {
+					if(y.getPieceColor() == color && y.getDisplayName() == "king") {
+						kingY = y.getY();
+					}
+				}
+			}
+		}
+		return kingY;
+	}
+	
+	private void changePawnAtEnd(int startX, int startY, int endX, int endY) {
+		if(endX == 7 || endX == 0) {
+			if(board[startX][startY].getPieceColor() == "black") {
+				board[startX][startY] = getMaxBlackCpaturedPiece();
+			} else if(board[startX][startY].getPieceColor() == "white") {
+				board[startX][startY] = getMaxWhiteCpaturedPiece();
+			}
+			
 		}
 	}
 	
@@ -321,7 +372,7 @@ public class Board {
 			board[endX][endY] = board[startX][startY];
 			setValid(startX, startY);
 		} else {
-			System.out.println("Invalid Move");
+			System.out.println("\n(" + startX + "," + startY + ")" + " to (" + endX + "," + endY + ")" + " is a invalid move!");
 			System.exit(0);
 		}
 		Update();
